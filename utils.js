@@ -82,6 +82,7 @@ module.exports = {
     get_flags(data) {
         const flags = [];
         let obj_name, cur;
+        let sortedFlags = {};
         for (const obj of data) {
             if (typeof obj === 'number') {
                 continue;
@@ -90,7 +91,30 @@ module.exports = {
             if (!Flags[obj_name] || obj['p'].length === 1) {
                 continue;
             }
+
             cur = [Flags[obj_name]['x'], Flags[obj_name]['y'], obj['p'][0], obj['p'][1]];
+            if (!sortedFlags[cur[0]]) {
+                sortedFlags[cur[0]] = [];
+                sortedFlags[cur[0]].push(cur);
+            } else {
+                sortedFlags[cur[0]].push(cur);
+            }
+
+            if (Object.keys(sortedFlags).length === 3) {
+                let res = [];
+                for (let [key, value] of Object.entries(sortedFlags)) {
+                    for (let item of value) {
+                        if (res.length === 3) {
+                            return res;
+                        }
+                        res.push(item);
+                    }
+                    if (res.length === 3) {
+                        return res;
+                    }
+                }
+            }
+
             flags.push(cur);
             if (flags.length >= 2) { // Заменить на условие выхода по трем флагам; все 3 возвращаемых флага должны иметь разные координаты по x;
                 // если таких трех флагов не найдется, то возвратить любые 2 или 1 флага

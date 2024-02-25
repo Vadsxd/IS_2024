@@ -105,7 +105,7 @@ class Agent {
                 flag3 = flags[2];
                 let coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1], flag2[0], flag2[1],
                     flag1[3], flag2[3], flag3[0], flag3[1]);
-                console.log(coordinates);
+                console.log('coordinates:', coordinates);
             }
 
             
