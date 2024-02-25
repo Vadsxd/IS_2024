@@ -11,8 +11,8 @@ module.exports = async (agent, teamName, version) => {
 
     socket.sendMsg = (msg) => {
         return new Promise((resolve, reject) => {
-            socket.send(Buffer.from(msg), 6000, '172.21.113.70', (err, bytes) => {
-                console.log(msg);
+            socket.send(Buffer.from(msg), 6000, 'localhost', (err, bytes) => {
+                //console.log(msg);
                 if (err) reject(err);
                 resolve(bytes);
             });

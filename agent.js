@@ -1,12 +1,16 @@
 const Msg = require('./msg');
 const readline = require('readline');
-const Flags = require('./flags');
+const utils = require("./utils");
 
 class Agent {
     constructor() {
         this.position = 'l'; // По умолчанию - левая половина поля
         this.run = false; // Игра начата
         this.act = null; // Действия
+        this.rotationSpeed = null; // скорость вращения
+        this.x_boundary = 57.5;
+        this.y_boundary = 39;
+        /*
         this.rl = readline.createInterface({
             // Чтение консоли
             input: process.stdin,
@@ -26,6 +30,7 @@ class Agent {
                 if ('s' === input) this.act = {n: 'kick', v: 100};
             }
         });
+        */
     }
 
     msgGot(msg) {
@@ -62,6 +67,46 @@ class Agent {
 
     analyzeEnv(msg, cmd, p) {
         // анализ сообщения
+        //this.act = {n: 'turn', v: 20};
+        /*
+        console.log("message: ", msg);
+        console.log("cmd: ", cmd)
+        console.log("p: ", p)
+        if (cmd === "see"){
+            console.log("Array: ", p[1]["cmd"]["p"])
+        }
+        */
+
+        
+        if (this.rotationSpeed){
+            this.act = {n: 'turn', v: this.rotationSpeed};
+        }
+
+        
+        var flag1 = null;
+        var flag2 = null;
+        //flags_params = null;
+        if (cmd === "see"){
+            var flags = utils.get_flags(p);
+            console.log(flags);
+            //console.log(flags);
+            
+            if (flags.length === 2){
+                flag1 = flags[0];
+                flag2 = flags[1];
+                var coordinates = utils.solveby2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
+                    flag1[3], flag2[3], this.x_boundary, this.y_boundary);
+                console.log(coordinates);
+            }
+
+            if (flags.length === 3){
+                // вызов функции utils.solveby3 с получением координат игрока и печатью в консоль.
+            }
+
+            
+            //flags_params.push(this.x_boundary, this.y_boundary);
+        }
+        
     }
 
     sendCmd() {
