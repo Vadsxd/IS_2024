@@ -103,12 +103,10 @@ module.exports = {
             if (Object.keys(sortedFlags).length === 3) {
                 let res = [];
                 for (let [key, value] of Object.entries(sortedFlags)) {
-                    for (let item of value) {
-                        if (res.length === 3) {
-                            return res;
-                        }
-                        res.push(item);
+                    if (res.length === 3) {
+                        return res;
                     }
+                    res.push(value[0]);
                     if (res.length === 3) {
                         return res;
                     }
@@ -116,10 +114,6 @@ module.exports = {
             }
 
             flags.push(cur);
-            if (flags.length >= 2) { // Заменить на условие выхода по трем флагам; все 3 возвращаемых флага должны иметь разные координаты по x;
-                // если таких трех флагов не найдется, то возвратить любые 2 или 1 флага
-                break;
-            }
         }
         return flags;
     },

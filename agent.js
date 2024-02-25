@@ -96,16 +96,18 @@ class Agent {
                 flag2 = flags[1];
                 let coordinates = utils.solveby2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
                     flag1[3], flag2[3], this.x_boundary, this.y_boundary);
-                console.log(coordinates);
+                console.log('coordinates:', coordinates);
             }
 
             if (flags.length === 3){
                 flag1 = flags[0];
                 flag2 = flags[1];
                 flag3 = flags[2];
-                let coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1], flag2[0], flag2[1],
-                    flag1[3], flag2[3], flag3[0], flag3[1]);
-                console.log('coordinates:', coordinates);
+                let coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1],
+                    flag2[0], flag2[1], flag3[0], flag3[1]);
+                if (!isNaN(coordinates[0]) && !isNaN(coordinates[0]) && coordinates[1] !== -Infinity) {
+                    console.log('coordinates:', coordinates);
+                }
             }
 
             
