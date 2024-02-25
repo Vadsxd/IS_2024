@@ -82,25 +82,30 @@ class Agent {
             this.act = {n: 'turn', v: this.rotationSpeed};
         }
 
-        
-        var flag1 = null;
-        var flag2 = null;
+        let flag1 = null;
+        let flag2 = null;
+        let flag3 = null;
         //flags_params = null;
         if (cmd === "see"){
-            var flags = utils.get_flags(p);
+            let flags = utils.get_flags(p);
             console.log(flags);
             //console.log(flags);
             
             if (flags.length === 2){
                 flag1 = flags[0];
                 flag2 = flags[1];
-                var coordinates = utils.solveby2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
+                let coordinates = utils.solveby2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
                     flag1[3], flag2[3], this.x_boundary, this.y_boundary);
                 console.log(coordinates);
             }
 
             if (flags.length === 3){
-                // вызов функции utils.solveby3 с получением координат игрока и печатью в консоль.
+                flag1 = flags[0];
+                flag2 = flags[1];
+                flag3 = flags[2];
+                let coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1], flag2[0], flag2[1],
+                    flag1[3], flag2[3], flag3[0], flag3[1]);
+                console.log(coordinates);
             }
 
             
