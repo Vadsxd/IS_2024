@@ -113,6 +113,10 @@ class Agent {
                 let object = objects[0];
                 let eo = this.get_unit_vector(object[1]);
 
+                if (eo === undefined) {
+                    return;
+                }
+
                 let obj_coords = utils.get_object_coords(flag1[2], object[0], coordinates[0], coordinates[1], flag1[0], flag1[1], flag1[3], object[1], eo);
                 if (obj_coords){
                     console.log("obj_coords:", obj_coords);    
