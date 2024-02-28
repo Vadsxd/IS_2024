@@ -83,6 +83,7 @@ class Agent {
             let objects = flags_and_objects[1];
 
             if (flags.length === 2){
+                //console.log(flags);
                 flag1 = flags[0];
                 flag2 = flags[1];
                 let e1 = this.get_unit_vector(flag1[3]);
@@ -104,19 +105,19 @@ class Agent {
                 flag3 = flags[2];
                 coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1],
                     flag2[0], flag2[1], flag3[0], flag3[1]);
-                if (!isNaN(coordinates[0]) && !isNaN(coordinates[0]) && coordinates[1] !== -Infinity) {
-                    console.log('coordinates:', coordinates);
-                }
+                //if (!isNaN(coordinates[0]) && !isNaN(coordinates[0]) && coordinates[1] !== -Infinity) {
+                //    console.log('coordinates:', coordinates);
+                //}
+                console.log("coordinates: ", coordinates);
             }
 
             if (objects.length > 0){
                 let object = objects[0];
+                //console.log(object);
                 let eo = this.get_unit_vector(object[1]);
-
-                if (eo === undefined) {
+                if (!eo){
                     return;
                 }
-
                 let obj_coords = utils.get_object_coords(flag1[2], object[0], coordinates[0], coordinates[1], flag1[0], flag1[1], flag1[3], object[1], eo);
                 if (obj_coords){
                     console.log("obj_coords:", obj_coords);    
