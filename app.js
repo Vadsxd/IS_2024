@@ -20,8 +20,6 @@ const VERSION = 7;
     rotationSpeed = +(await it.next()).value;
     rl.close();
 
-    console.log([playerCords1, playerCords2, rotationSpeed]);
-
     let player1 = new Agent('A');
     player1.rotationSpeed = rotationSpeed;
     let player2 = new Agent('B');
