@@ -3,34 +3,28 @@ const readline = require('readline');
 const utils = require("./utils");
 
 class Agent {
-    constructor() {
+    constructor(teamName) {
         this.position = 'l'; // По умолчанию - левая половина поля
         this.run = false; // Игра начата
         this.act = null; // Действия
         this.rotationSpeed = null; // скорость вращения
         this.x_boundary = 57.5;
         this.y_boundary = 39;
-        /*
-        this.rl = readline.createInterface({
-            // Чтение консоли
-            input: process.stdin,
-            output: process.stdout,
-        });
-        this.posMethod = '3P';
+        this.teamName = teamName;
+        this.DirectionOfSpeed = null;
+    }
 
-        this.rl.on('line', (input) => {
-            // Обработка строки из кон—
-            if (this.run) {
-                // Если игра начата
-                // ДВижения вперед, вправо, влево, удар по мячу
+    get_unit_vector(Direction) {
+        if (!this.DirectionOfSpeed) {
+            return;
+        }
 
-                if ('w' === input) this.act = {n: 'dash', v: 100};
-                if ('d' === input) this.act = {n: 'turn', v: 20};
-                if ('a' === input) this.act = {n: 'turn', v: -20};
-                if ('s' === input) this.act = {n: 'kick', v: 100};
-            }
-        });
-        */
+        if (this.teamName === 'A') {
+            let angle = this.DirectionOfSpeed - Direction;
+            angle = angle * Math.PI / 180;
+
+            return [Math.cos(angle), -Math.sin(angle)];
+        }
     }
 
     msgGot(msg) {
@@ -66,54 +60,62 @@ class Agent {
     }
 
     analyzeEnv(msg, cmd, p) {
-        // анализ сообщения
-        //this.act = {n: 'turn', v: 20};
-        /*
-        console.log("message: ", msg);
-        console.log("cmd: ", cmd)
-        console.log("p: ", p)
-        if (cmd === "see"){
-            console.log("Array: ", p[1]["cmd"]["p"])
-        }
-        */
-
-        
-        if (this.rotationSpeed){
-            this.act = {n: 'turn', v: this.rotationSpeed};
+        if (this.rotationSpeed) {
+            if (!this.act) {
+                this.act = {n: 'turn', v: this.rotationSpeed};
+            }
+        } else {
+            return;
         }
 
-        let flag1 = null;
-        let flag2 = null;
-        let flag3 = null;
-        //flags_params = null;
-        if (cmd === "see"){
-            let flags = utils.get_flags(p);
-            console.log(flags);
-            //console.log(flags);
-            
-            if (flags.length === 2){
+        if (cmd === "sense_body") {
+            this.DirectionOfSpeed = p[3]['p'][1];
+        }
+
+        if (cmd === "see") {
+            let flag1 = null;
+            let flag2 = null;
+            let flag3 = null;
+            let coordinates;
+            let flags_and_objects = utils.get_flags_and_objects(p);
+            let flags = flags_and_objects[0];
+            let objects = flags_and_objects[1];
+
+            if (flags.length === 2) {
                 flag1 = flags[0];
                 flag2 = flags[1];
-                let coordinates = utils.solveby2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
-                    flag1[3], flag2[3], this.x_boundary, this.y_boundary);
-                console.log('coordinates:', coordinates);
+                let e1 = this.get_unit_vector(flag1[3]);
+                let e2 = this.get_unit_vector(flag2[3]);
+
+                coordinates = utils.solveBy2(flag1[2], flag2[2], flag1[0], flag1[1], flag2[0], flag2[1],
+                    e1, e2, this.x_boundary, this.y_boundary);
+                if (coordinates) {
+                    console.log("coordinates:", coordinates);
+                }
+
             }
 
-            if (flags.length === 3){
+            if (flags.length === 3) {
                 flag1 = flags[0];
                 flag2 = flags[1];
                 flag3 = flags[2];
-                let coordinates = utils.solveby3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1],
+                coordinates = utils.solveBy3(flag1[2], flag2[2], flag3[2], flag1[0], flag1[1],
                     flag2[0], flag2[1], flag3[0], flag3[1]);
-                if (!isNaN(coordinates[0]) && !isNaN(coordinates[0]) && coordinates[1] !== -Infinity) {
-                    console.log('coordinates:', coordinates);
-                }
+                console.log("coordinates:", coordinates);
             }
 
-            
-            //flags_params.push(this.x_boundary, this.y_boundary);
+            if (objects.length > 0) {
+                let object = objects[0];
+                let eo = this.get_unit_vector(object[1]);
+                if (!eo) {
+                    return;
+                }
+                let obj_coords = utils.get_object_coords(flag1[2], object[0], coordinates[0], coordinates[1], flag1[0], flag1[1], flag1[3], object[1], eo);
+                if (obj_coords) {
+                    console.log("obj_coords:", obj_coords);
+                }
+            }
         }
-        
     }
 
     sendCmd() {
