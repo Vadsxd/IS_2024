@@ -12,7 +12,7 @@ module.exports = {
             [x1, x2] = [x2, x1];
             [y1, y2] = [y2, y1];
         }
-
+      
         let alpha1 = (y1 - y2) / (x2 - x1);
         let beta1 = (y2 * y2 - y1 * y1 + x2 * x2 - x1 * x1 + d1 * d1 - d2 * d2) / (2 * (x2 - x1));
         let alpha2 = (y1 - y3) / (x3 - x1);
@@ -81,6 +81,7 @@ module.exports = {
             let discriminant = Math.pow(b * b - 4 * a * c, 0.5);
 
             y = (-b + discriminant) / (2 * a);
+
             x = y * alpha + beta;
             possible_poses.push([x, y]);
 
@@ -140,6 +141,7 @@ module.exports = {
             }
 
             cur = [Flags[obj_name]['x'], Flags[obj_name]['y'], obj['p'][0], obj['p'][1]];
+          
             if (res.length < 3) {
                 if (!sortedFlags[cur[0]]) {
                     sortedFlags[cur[0]] = [];
@@ -160,6 +162,8 @@ module.exports = {
             if (flags.length < 2) {
                 flags.push(cur);
             }
+
+            flags.push(cur);
         }
 
         if (res.length === 3 && !this.checkSame3Y(res)) {
