@@ -1,6 +1,6 @@
 const dgram = require('dgram');
 
-module.exports = async (agent, teamName, version) => {
+module.exports = async (agent, teamName, version, goalie) => {
     const socket = dgram.createSocket({type: 'udp4', reuseAddr: true});
 
     agent.setSocket(socket);
@@ -18,6 +18,12 @@ module.exports = async (agent, teamName, version) => {
             });
         });
     };
-
-    await socket.sendMsg(`(init ${teamName} (version ${version}))`);
+    console.log("goalie", goalie);
+    if (!goalie){
+        await socket.sendMsg(`(init ${teamName} (version ${version}))`);    
+    } else {
+        console.log("yesYES");
+        await socket.sendMsg(`(init ${teamName} (version ${version}) (goalie))`);
+    }
+    
 };
