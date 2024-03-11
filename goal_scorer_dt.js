@@ -2,7 +2,7 @@ const rotationSpeed = -45;
 const goalAngle = 3;
 const flagCloseness = 3;
 const ballCloseness = 0.5;
-const runSpeed = 100;
+const runSpeed = 85;
 const waitTime = 20;
 const passAngleChange = 30;
 const slowDownDistance = 3;
@@ -141,6 +141,7 @@ const DT = {
 			if (state.turn_angle < 0){
 				angle = 45;
 			}
+			angle = 45;
 			state.command = {n: "kick", v: "10 " + angle};
 		},
 		next: "sendCommand",

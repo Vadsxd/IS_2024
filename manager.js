@@ -69,7 +69,7 @@ class Manager{
 	}
 
 	static getStrength(distance){
-		return Math.min(100, Math.floor(distance * 6));
+		return Math.min(100, Math.floor(distance * 5));
 	}
 
 	static getAngleAndStrength(p){
