@@ -1,10 +1,15 @@
 const readline = require('readline');
 const Agent = require('./agent');
 const Socket = require('./socket');
+const Controller = require('./controller');
+const Manager = require("./manager");
+const dt = require("./goal_scorer_dt");
+const dt2 = require("./assist_player_dt");
 const VERSION = 7;
 
+
 (async () => {
-    let playerCords1, playerCords2, rotationSpeed;
+    let assist_playerCords, score_playerCords, rotationSpeed, npc1Cords, npc2Cords;
 
     const rl = readline.createInterface({
         input: process.stdin,
@@ -12,21 +17,35 @@ const VERSION = 7;
     });
     const it = rl[Symbol.asyncIterator]();
 
-    console.log('Enter first player coords (x,y):');
-    playerCords1 = (await it.next()).value.split(' ').map((a) => +a);
-    console.log('Enter second player coords (x y):');
-    playerCords2 = (await it.next()).value.split(' ').map((a) => +a);
-    console.log('Enter first player rotation speed:');
-    rotationSpeed = +(await it.next()).value;
-    rl.close();
+    assist_playerCords = [-20, 0];
+    score_playerCords = [-20, 20];
 
-    let player1 = new Agent('A');
-    player1.rotationSpeed = rotationSpeed;
-    let player2 = new Agent('B');
+    npc1Cords = [-57.5, -38];
+    npc2Cords = [-57.5, 38];
 
-    await Socket(player1, 'A', VERSION);
-    await Socket(player2, 'B', VERSION);
 
-    await player1.socketSend('move', `${playerCords1[0]} ${playerCords1[1]}`)
-    await player2.socketSend('move', `${playerCords2[0]} ${playerCords2[1]}`)
+    let assist_player = new Agent('A');
+    assist_player.playerName = "assist_player";
+    assist_player.dt = dt2;
+    assist_player.manager = new Manager();
+
+    let score_player = new Agent('A');
+    score_player.playerName = "score_player";
+    score_player.dt = dt;
+    score_player.manager = new Manager();
+
+    let npc1 = new Agent("B");
+    let npc2 = new Agent("B");
+
+    await Socket(assist_player, 'A', VERSION);
+    await Socket(score_player, 'A', VERSION);
+
+    await Socket(npc1, 'B', VERSION);
+    await Socket(npc2, 'B', VERSION);
+
+    await assist_player.socketSend('move', `${assist_playerCords[0]} ${assist_playerCords[1]}`);
+    await score_player.socketSend('move', `${score_playerCords[0]} ${score_playerCords[1]}`);
+
+    await npc1.socketSend('move', `${npc1Cords[0]} ${npc1Cords[1]}`);
+    await npc2.socketSend('move', `${npc2Cords[0]} ${npc2Cords[1]}`);  
 })();
