@@ -1,14 +1,14 @@
 const FL = "flag", KI = "kick", PL = "p";
-const leaderSpeed = 60, goalAngle = 4, rotationSpeed = 75;
+const leaderSpeed = 40, goalAngle = 4, rotationSpeed = 75;
 const fullSpeed = 100, avgSpeed = 40, lowSpeed = 20;
-const farPlayerDist = 10, avgPlayerDist = 7, closePlayerDist = 2;
-const holdedAngle = 30, aroundAngleLow = 20, aroundAngleHigh = 30;
+const farPlayerDist = 13, avgPlayerDist = 7, closePlayerDist = 2;
+const holdedAngle = 35, aroundAngleLow = 20, aroundAngleHigh = 30;
 const leaderStop = 7;
 
 const DT2 = {
 	state: {
 		next: 0,
-		sequence: [{act: FL, fl: "fcb"},
+		sequence: [/*{act: FL, fl: "fcb"},*/
 			{act: KI, fl: "b", goal: "gr"}],
 		command: null,
 		leader: null
@@ -121,7 +121,7 @@ const DT2 = {
 		next: "sendCommand",		
 	},
 	closePlayer: {
-		condition: (mgr, state, p) => (state.angle > 40 || state.angle < 25),
+		condition: (mgr, state, p) => (state.angle > 40 || state.angle < 30),
 		trueCond: "holdAngle",
 		falseCond: "holdDistance",
 	},

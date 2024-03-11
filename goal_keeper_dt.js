@@ -86,7 +86,7 @@ const DT = {
 		falseCond: "turnBody",
 	},
 	ballClose: {
-		condition: (mgr, state, p) => state.ballDistance < 10,
+		condition: (mgr, state, p) => state.ballDistance < 14,
 		trueCond: "playerVisible",
 		falseCond: "sendCommand", 
 	},
