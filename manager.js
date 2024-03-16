@@ -5,7 +5,7 @@ class Manager{
 	getAction(dt, p, cmd){
 		function execute(dt, title, p, cmd){
 			const action = dt[title];
-			console.log(title);
+			// console.log(title);
 
 			if (typeof action.exec == "function"){
 				action.exec(Manager, dt.state, p, cmd);

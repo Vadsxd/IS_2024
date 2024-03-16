@@ -21,7 +21,7 @@ const VERSION = 7;
     score_playerCords = [-20, 20];
 
     npc1Cords = [-57.5, -38];
-    npc2Cords = [-57.5, 38];
+    // npc2Cords = [-57.5, 38];
 
 
     let assist_player = new Agent('A');
@@ -29,23 +29,23 @@ const VERSION = 7;
     assist_player.dt = dt2;
     assist_player.manager = new Manager();
 
-    let score_player = new Agent('A');
-    score_player.playerName = "score_player";
-    score_player.dt = dt;
-    score_player.manager = new Manager();
+    // let score_player = new Agent('A');
+    // score_player.playerName = "score_player";
+    // score_player.dt = dt;
+    // score_player.manager = new Manager();
 
     let npc1 = new Agent("B");
-    let npc2 = new Agent("B");
+    // let npc2 = new Agent("B");
 
     await Socket(assist_player, 'A', VERSION);
-    await Socket(score_player, 'A', VERSION);
+    // await Socket(score_player, 'A', VERSION);
 
     await Socket(npc1, 'B', VERSION);
-    await Socket(npc2, 'B', VERSION);
+    // await Socket(npc2, 'B', VERSION);
 
     await assist_player.socketSend('move', `${assist_playerCords[0]} ${assist_playerCords[1]}`);
-    await score_player.socketSend('move', `${score_playerCords[0]} ${score_playerCords[1]}`);
+    // await score_player.socketSend('move', `${score_playerCords[0]} ${score_playerCords[1]}`);
 
     await npc1.socketSend('move', `${npc1Cords[0]} ${npc1Cords[1]}`);
-    await npc2.socketSend('move', `${npc2Cords[0]} ${npc2Cords[1]}`);  
+    // await npc2.socketSend('move', `${npc2Cords[0]} ${npc2Cords[1]}`);
 })();
