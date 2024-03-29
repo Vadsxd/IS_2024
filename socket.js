@@ -22,7 +22,6 @@ module.exports = async (agent, teamName, version, goalie) => {
     if (!goalie){
         await socket.sendMsg(`(init ${teamName} (version ${version}))`);    
     } else {
-        console.log("yesYES");
         await socket.sendMsg(`(init ${teamName} (version ${version}) (goalie))`);
     }
     

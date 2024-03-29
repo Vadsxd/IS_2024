@@ -14,6 +14,15 @@ module.exports = {
             }
         }        
     },
+    get_unit_vector(direction, directionOfSpeed){
+        // TODO: добавить поддержку игрока из команды B
+        if (directionOfSpeed === null){
+            return null;
+        }
+        let angle = directionOfSpeed -  direction;
+        angle = angle * Math.PI / 180;
+        return [Math.cos(angle), -Math.sin(angle)];
+    },
     // fix: выбирать флаги так, чтобы alpha получались разными
     solveby3(d1, d2, d3, x1, y1, x2, y2, x3, y3) {
         //console.log(d1, d2, d3, x1, y1, x2, y2, x3, y3);
@@ -61,20 +70,20 @@ module.exports = {
         let possible_poses = [];
         let in_field = [];
         let result = [];
-        if (x1 === x2){
+        if (x1 == x2){
             y = (this.squares_diff(y2, y1) + this.squares_diff(d1, d2)) / (2 * (y2 - y1));
-            let diff = Math.pow(this.squares_diff(d1, y-y1), 0.5);
+            diff = Math.pow(this.squares_diff(d1, y-y1), 0.5);
             x = x1 + diff;
             x_ = x - 2 * diff;
-
+            
             possible_poses.push([x, y]);
             possible_poses.push([x_, y]);
         } else if (y1 == y2){
             x = (this.squares_diff(x2, x1) + this.squares_diff(d1, d2)) / (2 * (x2 - x1));
-            let diff = Math.pow(this.squares_diff(d1, x-x1), 0.5);
+            diff = Math.pow(this.squares_diff(d1, x-x1), 0.5);
             y = y1 + diff;
             y_ = y - 2 * diff;
-
+            
             possible_poses.push([x, y]);
             possible_poses.push([x, y_]);
         } else {
@@ -84,16 +93,16 @@ module.exports = {
 	        let a = alpha * alpha + 1;
 	        let b = -2 * (alpha * (x1 - beta) + y1);
 	        let c = Math.pow(x1 - beta, 2) + this.squares_diff(y1, d1);
-
+	  
 	        let discriminant = Math.pow(b*b - 4 * a * c, 0.5);
-
+	        
 	        y = (-b + discriminant) / (2 * a);
 			x = y * alpha + beta;
 			possible_poses.push([x, y]);
 
 	        y_ = y - discriminant / a;
 	        x_ = y_ * alpha + beta;
-	        possible_poses.push([x_, y_])
+	        possible_poses.push([x_, y_]) 
         }
         for (const coord of possible_poses){
         	if ((Math.abs(coord[0]) <= x_bound) && (Math.abs(coord[1]) <= y_bound)){
@@ -141,16 +150,14 @@ module.exports = {
             if (typeof obj === 'number'){
                 continue;
             }
-
             let cur_obj_name = obj['cmd']['p'].join('');
-            if (cur_obj_name === obj_name && obj_name !== 'p') {
-                return obj['p'];
-            } else if (obj_name === 'p' && cur_obj_name.includes(obj_name) && !cur_obj_name.includes("f") && cur_obj_name.includes("A")){
+            if (cur_obj_name === obj_name || (obj_name === 'p' && cur_obj_name.includes(obj_name)) && !cur_obj_name.includes("f") && !cur_obj_name.includes("B")){
                 return obj['p'];
             }
         }
         return null;
     },
+
 
     get_flags_and_objects_2(data){
         let flags = [];
@@ -158,30 +165,23 @@ module.exports = {
         let sortedFlags = {};
         let cur;
         let res = [];
-        let obj_name;
-        for (const obj of data) {
-            // console.log(obj);
-            if (typeof obj === 'number') {
+        for (const obj of data){
+            if (typeof obj === 'number'){
                 continue;
             }
             obj_name = obj['cmd']['p'].join('');
 
-            if (obj['p'].length === 1) {
+            if (obj['p'].length === 1){
                 continue;
             }
 
-            if ((!Flags[obj_name] && obj_name === "b") || (obj_name === "p" && !Flags[obj_name])) {
+            if (!Flags[obj_name] && obj_name == "b"){
                 objects.push([obj['p'][0], obj['p'][1]]);
                 continue;
             }
 
-            if (!Flags[obj_name]) {
-                continue;
-            }
-
             cur = [Flags[obj_name]['x'], Flags[obj_name]['y'], obj['p'][0], obj['p'][1]];
-
-            if (res.length < 3) {
+            if (res.length < 3){
                 if (!sortedFlags[cur[0]]) {
                     sortedFlags[cur[0]] = [];
                     sortedFlags[cur[0]].push(cur);
@@ -198,11 +198,11 @@ module.exports = {
                     }
                 }
             }
-            if (flags.length < 2) {
+            if (flags.length < 2){
                 flags.push(cur);
             }
         }
-        if (res.length === 3 && !this.checkSame3Y(res)){
+        if (res.length === 3 && !checkSame3Y(res)){
             return [res, objects];
         } else {
             return [flags, objects]; 

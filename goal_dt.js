@@ -2,8 +2,7 @@ const FL = "flag", KI = "kick"
 const DT = {
 	state: {
 		next: 0,
-		sequence: [{act: FL, fl: "gl"},
-			{act: KI, fl: "b", goal: "gr"}],
+		sequence: [{act: FL, fl: "fplc"}, {act: KI, fl: "b", goal: "gr"}],
 		command: null
 	},
 	root: {
@@ -22,7 +21,7 @@ const DT = {
 	},
 	rotate: {
 		exec(mgr, state, p){
-			state.command = {n: "turn", v: 90}
+			state.command = {n: "turn", v: 45}
 		},
 		next: "sendCommand",
 	},
@@ -44,7 +43,7 @@ const DT = {
 		next: "goalVisible",
 	},
 	farGoal: {
-		condition: (mgr, state, p) => mgr.getAngle(state.action.fl, p) > 4,
+		condition: (mgr, state, p) => Math.abs(mgr.getAngle(state.action.fl, p)) > 4,
 		trueCond: "rotateToGoal",
 		falseCond: "runToGoal",
 	},
@@ -56,12 +55,16 @@ const DT = {
 	},
 	runToGoal: {
 		exec(mgr, state, p){
-			state.command = {n: "dash", v: 100};
+			state.command = {n: "dash", v: 60};
 		},
 		next: "sendCommand",
 	},
 	sendCommand: {
-		command: (mgr, state) => state.command,
+		command(mgr, state){
+			console.log(state.command);
+			return state.command;
+
+		}
 	},
 	ballSeek: {
 		condition: (mgr, state, p) => 0.5 > mgr.getDistance(state.action.fl, p),
