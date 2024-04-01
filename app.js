@@ -1,13 +1,9 @@
 const readline = require('readline');
 const Agent = require('./agent');
 const Socket = require('./socket');
-const Controller = require('./controller');
-const Manager = require("./manager");
-const dt2 = require("./echelon2_dt2");
 const low_ctrl = require("./field_player_low");
 const high_ctrl = require("./field_player_high");
 const VERSION = 7;
-const utils = require("./utils");
 
 const goalie_low = require("./ctrl_low");
 const goalie_middle = require("./ctrl_middle");
@@ -25,40 +21,6 @@ function createAgent(team, goalkeeper, controllers, bottom, top, center, start_x
 }
 
 (async () => {
-    let assist_playerCords, score_playerCords, rotationSpeed, npc1Cords, npc2Cords;
-
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
-    
-    /*
-    console.log(utils.returnInZone(-11, 10, -10, 0));
-
-    console.log(utils.returnInZone(-11, 10, -10, -30));
-    console.log(utils.returnInZone(-11, 10, -10, -60));
-    console.log(utils.returnInZone(-11, 10, -10, -90));
-    console.log(utils.returnInZone(-11, 10, -10, -135));
-
-    console.log(utils.returnInZone(-11, 10, -10, 30));
-    console.log(utils.returnInZone(-11, 10, -10, 60));
-    console.log(utils.returnInZone(-11, 10, -10, 90));
-    console.log(utils.returnInZone(-11, 10, -10, 135));
-    return;
-    */
-    
-    /*
-    score_playerCords = [-20, 0];
-    goalkeeper_coords = [-40, 0];
-    let score_player = new Agent("A", false);
-    score_player.controllers = [low_ctrl, high_ctrl];
-    score_player.bottom = 10;
-    score_player.top = -10;
-    score_player.center = -10;
-
-    await Socket(score_player, 'A', VERSION);
-    await score_player.socketSend('move', `${score_playerCords[0]} ${score_playerCords[1]}`);
-    */
     let A_team = [
         [-40, -20, -35, -40, -30],
         [-20, 0, -35, -40, -10],
@@ -138,6 +100,4 @@ function createAgent(team, goalkeeper, controllers, bottom, top, center, start_x
         await player.socketSend('move', `${player.start_x} ${player.start_y}`);
 
     }
-
-
 })();

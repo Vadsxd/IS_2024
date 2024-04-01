@@ -1,10 +1,7 @@
 const Msg = require('./msg');
-const readline = require('readline');
 const utils = require("./utils");
 const Flags = require('./flags');
 const TManager = require('./timeMacineManager');
-const goal_keeper_TA = require("./goal_keeper_time_machine");
-const fw_TA = require("./fw_time_machine");
 const Taken = require("./taken");
 
 // имя первого игрока: p"A"1
